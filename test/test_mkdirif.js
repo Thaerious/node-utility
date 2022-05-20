@@ -6,7 +6,11 @@ const args = new ParseArgs().run();
 
 const TEST_DIRECTORY = "test/temp";
 const cwd = process.cwd();
-process.chdir("test");
+
+function setUp(){
+    mkdirIf(TEST_DIRECTORY);
+    process.chdir("test");
+}
 
 function cleanUp () {
     if (!args.flags[`no-clean`]) {
@@ -20,6 +24,7 @@ function cleanUp () {
 
 describe("Test Make Directory If", function () {
     describe("make directory for file path (/temp/ima-file)", function () {
+        before(setUp);
         after(cleanUp);
 
         it("directory exists", () => {
@@ -42,6 +47,11 @@ describe("Test Make Directory If", function () {
         it("works with deep nested directory", () => {
             const actual = mkdirIf("temp/one/two/three/ima-file")
             assert.ok(FS.existsSync("temp/one/two/three"));
+        });
+
+        it("creates path from var-len-arg strings", () => {
+            const actual = mkdirIf("temp", "one", "dir", "filename")
+            assert.ok(FS.existsSync("temp/one/dir"));
         });
 
         it("when terminated with / treats the path as a whole directory", () => {

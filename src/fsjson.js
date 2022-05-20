@@ -18,9 +18,16 @@ function writeFileField (path, key, value) {
     saveJSON(path, json);
 }
 
+function mergeJSON(path, object){
+    const previous = loadJSON(path);
+    const next = {...previous, ...object};
+    saveJSON(path, next);
+}
+
 const fsjson = {
     load: loadJSON,
     save: saveJSON,
+    merge: mergeJSON,
     writeField: writeFileField
 };
 
