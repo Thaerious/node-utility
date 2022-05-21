@@ -97,4 +97,19 @@ describe("Test FS Json", function () {
         });
     });
 
+    describe("use merge to create a new file with default values", function (){
+        before(function(){
+            fsjson.merge("new_merge.json", {default : "value"});
+        });
+
+        it("file is created", function(){
+            assert.ok(FS.existsSync("new_merge.json"));
+        });
+
+        it("has the default fields", function(){
+            const actual = fsjson.load("new_merge.json");
+            assert.strictEqual(actual["default"], "value");
+        });
+    });
+
 });
