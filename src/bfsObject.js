@@ -17,11 +17,17 @@
  * @param {*} test (value) test function defaults for equivalency
  * @returns
  */
-function bfsFirst (root, key, value, test) {
-    const queue = [];
+function bfsFirst (root, key, value) {
+    if (typeof key === "function") return(bfsTestFirst(root, key));
 
-    if (value) test = i => i === value;
-    else test = i => i !== undefined;
+    return bfsTestFirst(root, obj=>{
+        if (value) return obj[key] === value;
+        else return obj[key] !== undefined;
+    });
+}
+
+function bfsTestFirst (root, test) {
+    const queue = [];
 
     if (Array.isArray(root)) for (const item of root) queue.push(item);
     else if (typeof (root) === `object`) queue.push(root);
@@ -30,41 +36,42 @@ function bfsFirst (root, key, value, test) {
     while (queue.length > 0) {
         const current = queue.shift();
         if (!current) continue;
-        if (test(current[key])) return current;
+        if (test(current)) return current;
         pushObjectValues(queue, current);
     }
     return undefined;
 }
 
-function bfsAll (root, key, value, test) {
-    const returnArray = [];
-    const queue = [];
+function bfsAll (root, key, value) {
+    if (typeof key === "function") return(bfsTestAll(root, key));
 
-    if (value) test = i => i === value;
-    else test = i => i !== undefined;
+    return bfsTestAll(root, obj=>{
+        if (value) return obj[key] === value;
+        else return obj[key] !== undefined;
+    });
+}
+
+function bfsTestAll (root, test) {
+    const found = [];
+    const queue = [];
 
     if (Array.isArray(root)) for (const item of root) queue.push(item);
     else if (typeof (root) === `object`) queue.push(root);
-    else return undefined;
+    else return [];
 
     while (queue.length > 0) {
         const current = queue.shift();
         if (!current) continue;
-        if (test(current[key])) returnArray.push(current);
+        if (test(current)) found.push(current);
         pushObjectValues(queue, current);
     }
-    return returnArray;
+    return found;
 }
 
 function pushObjectValues (queue, current) {
-    if (!current) return;
     for (const prop of Object.keys(current)) {
         if (typeof current[prop] === `object`) {
             queue.push(current[prop]);
-        } else if (Array.isArray(current[prop])) {
-            for (const item of current[prop]) {
-                pushObjectValues(queue, item);
-            }
         }
     }
 }
