@@ -13,9 +13,9 @@ function setUp(){
 }
 
 function cleanUp () {
+    process.chdir(cwd);
     if (!args.flags[`no-clean`]) {
         // clean up test directory unless --no-clean is specified
-        process.chdir(cwd);
         if (FS.existsSync(TEST_DIRECTORY)) FS.rmSync(TEST_DIRECTORY, { recursive: true });
     } else {
         console.log("\n *** see test directory: test/temp");
