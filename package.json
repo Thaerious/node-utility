@@ -3,7 +3,9 @@
   "version": "0.0.3",
   "description": "",
   "main": "src/lib.js",
-  "scripts": {},
+  "scripts": {
+    "test" : "c8 mocha test; c8 report -r html"
+  },
   "author": "",
   "license": "ISC",
   "type": "module",
