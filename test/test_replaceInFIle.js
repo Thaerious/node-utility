@@ -2,7 +2,7 @@ import assert from "assert";
 import FS from "fs";
 import Path from "path";
 import ParseArgs from "@thaerious/parseargs";
-import replaceInFile from "../src/replaceInFile.js";
+import {replaceInFile} from "../src/replaceInFile.js";
 import mkdirIf from "../src/mkdirif.js";
 const args = new ParseArgs().run();
 

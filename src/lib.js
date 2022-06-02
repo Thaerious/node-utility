@@ -3,7 +3,7 @@ import fsjson from "./fsjson.js";
 import mkdirif from "./mkdirif.js";
 import seekfiles from "./seekfiles.js";
 import bfsObject from "./bfsObject.js";
-import replaceInFile from "./replaceInFile.js";
+import {replaceInFile, loadTemplate} from "./replaceInFile.js";
 
 export {
     convert,
@@ -11,5 +11,6 @@ export {
     mkdirif,
     seekfiles,
     bfsObject,
-    replaceInFile
+    replaceInFile,
+    loadTemplate
 };
