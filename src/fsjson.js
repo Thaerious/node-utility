@@ -2,6 +2,12 @@ import Path from "path";
 import FS from "fs";
 import mkdirIf from "./mkdirif.js";
 
+/**
+ * Load a JSON file by merging paths.
+ * Returns an empty object if no file found.
+ * @param  {...any} paths
+ * @returns parsed json object
+ */
 function loadJSON (...paths) {
     const path = Path.join(...paths);
     if (!FS.existsSync(path)) return {};
@@ -18,13 +24,35 @@ function writeFileField (path, key, value) {
     saveJSON(path, json);
 }
 
-function mergeJSON(path, object){
+/**
+ * Load and return the JSON at path, combining it with object.
+ * Similar to mergeJSON except existing values are preserved.
+ * @param {*} path 
+ * @param {*} object 
+ */
+ function loadIfJSON(path, object = {}){
+    const previous = loadJSON(path);
+    const next = {...object, ...previous};
+    saveJSON(path, next);
+    return next;
+}
+
+/**
+ * Load json from path and merge it with object.
+ * Similar to loadIfJSON except existing values are overwritten.
+ * @param {*} path 
+ * @param {*} object 
+ * @returns 
+ */
+function mergeJSON(path, object = {}){
     const previous = loadJSON(path);
     const next = {...previous, ...object};
     saveJSON(path, next);
+    return next;
 }
 
 const fsjson = {
+    loadIf: loadIfJSON,
     load: loadJSON,
     save: saveJSON,
     merge: mergeJSON,

@@ -112,4 +112,22 @@ describe("Test FS Json", function () {
         });
     });
 
+    describe("loadIf", function (){
+        before(function(){
+            fsjson.save("test_load_if.json", {a:1, b:2})
+        });
+
+        it("load a file that does exist, existing default values ignored", function(){
+            const actual = fsjson.loadIf("test_load_if.json", {a: 5, d: 1});
+            assert.strictEqual(actual["a"], 1);
+            assert.strictEqual(actual["d"], 1);
+        });
+
+        it("load a file that doesn't exist, default values used", function(){
+            const actual = fsjson.loadIf("does_not_exist.json", {a: 5, d: 1});
+            assert.strictEqual(actual["a"], 5);
+            assert.strictEqual(actual["d"], 1);
+        });
+    });    
+
 });
