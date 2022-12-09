@@ -36,6 +36,11 @@ const structure = {
         deep2: {
             files: ["k1.json", "k2.json"],
         },
+        deep3: {
+            sub: {
+                files: ["k1.json", "k2.json"],
+            }
+        },        
     },
     deep2: "sub/deep2"
 };
@@ -73,13 +78,13 @@ describe("Test Seek Files", function () {
         });
 
         it("8 results returned", function () {
-            assert.equal(this.result.length, 8);
+            assert.equal(this.result.length, 10);
         });
 
         it("check a record", function () {
             const acutal = bfs.first(this.result, "full", "sub/deep1/j2.json");
             const expected = {
-                root: '',
+                root: '.',
                 dir: 'sub/deep1',
                 base: 'j2.json',
                 ext: '.json',
@@ -129,4 +134,28 @@ describe("Test Seek Files", function () {
             assert.equal(this.result.length, 2);
         });
     });   
+
+    // Adds the origional root path to the description object.
+    describe("adds root path", function () {
+        before(function () {
+            this.result = seekFiles("deep2");
+        });
+
+        it("returns followed files", function () {
+            assert.equal(this.result[0].root, "deep2");
+            assert.equal(this.result[1].root, "deep2");
+        });
+    }); 
+
+    describe("adds root path from multiple roots", function () {
+        before(function () {
+            this.result = seekFiles(["deep2", "sub/deep3"]);
+        });
+
+        it("returns followed files", function () {
+            console.log(this.result);
+            assert.equal(this.result[0].root, "deep2");
+            assert.equal(this.result[2].root, "sub/deep3");
+        });
+    });     
 });
